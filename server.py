@@ -27,7 +27,7 @@ app.config['SECRET_KEY'] = os.urandom(24)
 def adduser(name, password):
     with open("users.json") as fp:
         users = json.load(fp)
-
+    fp.close()
     id = random.randint(0,99999999999)
     if id in users:
         id = random.randint(0,99999999999)
@@ -35,26 +35,28 @@ def adduser(name, password):
     users[id] = str(h.hexdigest())
     with open("idsandnames.json") as fp:
         userids = json.load(fp)
+    fp.close()
     if name in userids:
         return "already"
     with open("users.json", "w") as write_file:
         json.dump(users, write_file)
+    fp.close()
+    setusergroup(name, "default")
     
-    
-    userids[name] = id
+    userids[str(name)] = id
 
     with open("idsandnames.json", "w") as write_file:
         json.dump(userids, write_file)
-
-
-
+    fp.close()
 
 def checkaccount(name, password):
     with open("idsandnames.json") as fp:
         userids = json.load(fp)
-    id = userids[name]
+    fp.close()
+    id = userids[str(name)]
     with open("users.json") as fp:
         users = json.load(fp)
+    fp.close()
     hashedpass = users[str(id)]
     h = hashlib.md5(password.encode())
     if str(hashedpass) == str(h.hexdigest()):
@@ -64,9 +66,28 @@ def checkaccount(name, password):
         print(hashedpass)
         print(hash(password))
         return "no"
+
+def setusergroup(name, groupname):
+    with open("groups.json") as fp:
+        groups = json.load(fp)
+    fp.close()
+    groups[str(name)] = str(groupname)
+    with open("groups.json", "w") as write_file:
+        json.dump(groups, write_file)
+    fp.close()
+
+def getusergroup(name):
+    with open("groups.json") as fp:
+        groups = json.load(fp)
+    return group[str(name)]
+
     
-adduser("david1", "kolinshki")
-print(checkaccount("david1", "kolinshki"))
+
+
+
+#adduser("david1", "kolinshki")
+#print(checkaccount("david1", "kolinshki"))
+
 
 
 
