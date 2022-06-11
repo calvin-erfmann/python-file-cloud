@@ -81,13 +81,53 @@ def getusergroup(name):
         groups = json.load(fp)
     return group[str(name)]
 
-    
-
 
 
 #adduser("david1", "kolinshki")
 #print(checkaccount("david1", "kolinshki"))
 
+@app.route('/newuser', methods=['GET', 'POST'])
+def newuser():
+    if request.method == 'POST':
+        
+        form_data = request.form
+        
+
+        wert = adduser(form_data['username'], form_data['passwort'])
+        
+        if wert == "already":
+            return '''
+    <!doctype html>
+    <title>New User</title>
+    <h1>Create New User</h1>
+    <a>Username already in use</a>
+    <form method=post enctype=multipart/form-data>
+     <p>Username: <input type = "text" name = "username" />
+    <p>Password: <input type = "text" name = "passwort" />      
+        <p>Group :<input type="text" value="default" name = "group">
+        |   <input type=submit value=Create></p>
+    '''
+        else:
+            setusergroup(form_data['username'], form_data['group'])
+        
+        
+        return redirect('/')
+            
+
+    return '''
+    <!doctype html>
+    <title>New User</title>
+    <h1>Create New User</h1>
+    <form method=post enctype=multipart/form-data>
+    <p>Username: <input type = "text" name = "username" />
+    
+        <p>Password: <input type = "text" name = "passwort" />      
+        <p>Group: <input type="text" value="default" name = "group">
+        |   <input type=submit value=Create></p>
+    
+
+    </form>
+    '''
 
 
 
@@ -97,3 +137,4 @@ def getusergroup(name):
 
 
 
+app.run(host='0.0.0.0', port='25578')
