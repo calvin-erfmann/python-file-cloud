@@ -65,8 +65,8 @@ def checkaccount(name, password):
         print(hash(password))
         return "no"
     
-#how to add a user: adduser("david", "kolinshki")
-#how to check if the password is correct: print(checkaccount("david", "kolinshki"))
+adduser("david1", "kolinshki")
+print(checkaccount("david1", "kolinshki"))
 
 
 
